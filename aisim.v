@@ -62,17 +62,17 @@ module aisim(
         1:
           begin
             // select right schedule
-            if (context == 32'd1)
+            if (context[31:29] == 3'b001)
               begin
                 tx <= 1;
                 scheduleOut <= 32'd1;
               end 
-            else if  (context == 32'd2)
+            else if  (context[31:29] == 3'b010)
               begin
                 tx <= 1;
                 scheduleOut <= 32'd2;
               end 
-            else if (context  == 32'd3)
+            else if (context[31:29]  == 3'b100)
               begin
                 tx <= 1;
                 scheduleOut <= 32'd3;
