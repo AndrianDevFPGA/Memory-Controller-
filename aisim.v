@@ -6,6 +6,9 @@
 
 `timescale 1ns / 1ps
 
+
+`timescale 1ns / 1ps
+
 module aisim(
              clk,
              rst,
@@ -23,6 +26,7 @@ module aisim(
   output reg [31:0] scheduleOut; 
   
   integer state ;
+  integer count ;
   
   always @ (posedge clk)
     begin
@@ -31,6 +35,7 @@ module aisim(
           state <= 0;
           tx <= 0;
           scheduleOut <= 32'dx;
+          count <= 0;
         end 
       else
         begin
@@ -40,12 +45,21 @@ module aisim(
                 if (ev)
                   begin
                     state <= 1;
+                    counter <= 0;
                   end 
               end
             
             1:
               begin
-                state <=0;
+                if (counter < 4)
+                  begin
+                    state <= 1;
+                  end 
+                else
+                  begin
+                    state <=0;
+                    counter <= 0;
+                  end
               end 
           endcase
         end 
@@ -65,17 +79,17 @@ module aisim(
             if (context[31:29] == 3'b001)
               begin
                 tx <= 1;
-                scheduleOut <= 32'd1;
+                scheduleOut <= 32'b00000000111110111010000000100000;
               end 
             else if  (context[31:29] == 3'b010)
               begin
                 tx <= 1;
-                scheduleOut <= 32'd2;
+                scheduleOut <= 32'b00000000001111111010000000100000;
               end 
             else if (context[31:29]  == 3'b100)
               begin
                 tx <= 1;
-                scheduleOut <= 32'd3;
+                scheduleOut <= 32'b00000000001110111010000000100000;
               end
             else 
               begin
@@ -92,7 +106,6 @@ endmodule
 /*
 
 module tbAisim(
-
     );
     
   reg clk;
@@ -115,18 +128,18 @@ module tbAisim(
       clk =0;
       rst = 1;
       ev = 0;
-      context = 32'd0;
+      context = 32'b00100001000010000100001000010000;
       #10
       rst = 0;
       #50
       ev = 1;
-      context = 32'd1;
+      context = 32'b00100001000010000100001000010000;
       #100
-      context = 32'd2;
+      context = 32'b01000001000010000100001000010000;
        #100
-      context = 32'd3;
+      context = 32'b10000001000010000100001000010000;
         #100
-        context = 32'd0;
+        context = 32'b00000001000010000100001000010000;
       #300
       ev = 0;
     end
@@ -138,5 +151,6 @@ module tbAisim(
   
   
 endmodule
+
 
 */
